@@ -22,6 +22,7 @@ try:
 except ImportError:
     try:
         from xml.utils import iso8601
+
         def date_parse(time_string):
             """Return a datetime object for the given ISO8601 string.
 
@@ -154,6 +155,7 @@ def pluralize(singular):
         if re.search(i[0], singular):
             return re.sub(i[0], i[1], singular)
 
+
 def singularize(plural):
     """Convert plural word to its singular form.
 
@@ -231,8 +233,8 @@ def serialize(value, element):
         None
     """
     if value is None:
-      element.set('nil', 'true')
-      return
+        element.set('nil', 'true')
+        return
 
     for serializer in SERIALIZERS + [DEFAULT_SERIALIZER]:
         if isinstance(value, serializer['type']):
@@ -308,9 +310,9 @@ def xml_to_dict(xmlobj, saveroot=True):
         for child in element.getchildren():
             child_element = xml_to_dict(child, saveroot)
             if saveroot and isinstance(child_element, dict):
-                  return_list.append(child_element.values()[0])
+                return_list.append(child_element.values()[0])
             else:
-                  return_list.append(child_element)
+                return_list.append(child_element)
         if saveroot:
             return element_containers.ElementDict(element_list_type,
                                                   {element_list_type:

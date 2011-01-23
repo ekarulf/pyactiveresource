@@ -23,8 +23,8 @@ class ConnectionTest(unittest.TestCase):
         '''Create test objects.'''
         matz = {'id': 1, 'name': 'Matz'}
         david = {'id': 2, 'name': 'David'}
-        self.matz  = util.to_xml(matz, root='person')
-        self.david = util.to_xml(david, root='person') 
+        self.matz = util.to_xml(matz, root='person')
+        self.david = util.to_xml(david, root='person')
         self.people = util.to_xml([matz, david], root='people')
         self.people_single = util.to_xml(
             [matz], root='people-single-elements')
@@ -40,12 +40,12 @@ class ConnectionTest(unittest.TestCase):
 
         self.header = {'Key': 'value'}
         self.connection = connection.Connection(self.http.site)
-    
+
     def assert_response_raises(self, error, code):
         response = urllib2.HTTPError('', code, '', {}, StringIO(''))
         self.http.set_response(response)
         self.assertRaises(error, self.connection._open, '', '')
-      
+
     def test_handle_bad_request(self):
         # 400 is a bad request (e.g. malformed URI or missing request parameter)
         self.assert_response_raises(connection.BadRequest, 400)
@@ -119,32 +119,32 @@ class ConnectionTest(unittest.TestCase):
             'GET', 'http://localhost/people/2.xml', self.header, self.david)
         david = self.connection.get('/people/2.xml', self.header)
         self.assertEqual(david['name'], 'David')
-  
+
     def test_get_collection(self):
         self.http.respond_to('GET', '/people.xml', {}, self.people)
         people = self.connection.get('/people.xml')
         self.assertEqual('Matz', people[0]['name'])
         self.assertEqual('David', people[1]['name'])
-    
+
     def test_get_collection_single(self):
         self.http.respond_to('GET', '/people_single_elements.xml', {},
                              self.people_single)
         people = self.connection.get('/people_single_elements.xml')
         self.assertEqual('Matz', people[0]['name'])
-    
+
     def test_get_collection_empty(self):
         self.http.respond_to('GET', '/people_empty_elements.xml', {},
                              self.people_empty)
         people = self.connection.get('/people_empty_elements.xml')
         self.assertEqual([], people)
-  
+
     def test_post(self):
         self.http.respond_to(
             'POST', '/people.xml', self.zero_length_content_headers,
             '', 200, {'Location': '/people/5.xml'})
         response = self.connection.post('/people.xml')
         self.assertEqual('/people/5.xml', response['Location'])
-  
+
     def test_post_with_header(self):
         header = self.header
         header.update(self.zero_length_content_headers)
@@ -153,25 +153,25 @@ class ConnectionTest(unittest.TestCase):
             '', 201, {'Location': '/people/6.xml'})
         response = self.connection.post('/members.xml', self.header)
         self.assertEqual('/people/6.xml', response['Location'])
-  
+
     def test_put(self):
         self.http.respond_to('PUT', '/people/1.xml',
                              self.zero_length_content_headers, '', 204)
         response = self.connection.put('/people/1.xml')
         self.assertEqual(204, response.code)
-  
+
     def test_put_with_header(self):
         header = self.header
         header.update(self.zero_length_content_headers)
         self.http.respond_to('PUT', '/people/2.xml', header, '', 204)
         response = self.connection.put('/people/2.xml', self.header)
         self.assertEqual(204, response.code)
-  
+
     def test_delete(self):
         self.http.respond_to('DELETE', '/people/1.xml', {}, '')
         response = self.connection.delete('/people/1.xml')
         self.assertEqual(200, response.code)
-  
+
     def test_delete_with_header(self):
         self.http.respond_to('DELETE', '/people/2.xml', self.header, '')
         response = self.connection.delete('/people/2.xml', self.header)
@@ -195,8 +195,6 @@ class ConnectionTest(unittest.TestCase):
       assert_raises(connection.TimeoutError) { self.connection.get('/people_timeout.xml') }
 '''
 
-
 if __name__ == '__main__':
     unittest.main()
-
 

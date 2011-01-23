@@ -16,7 +16,6 @@ from pyactiveresource import element_containers
 from pyactiveresource import formats
 from pyactiveresource import util
 
-
 VALID_NAME = re.compile('[a-z_]\w*')  # Valid python attribute names
 
 
@@ -95,7 +94,7 @@ class Errors(object):
             attr_name = message.split()[0]
             key = util.underscore(attr_name)
             if key in attribute_keys:
-                self.add(key, message[len(attr_name)+1:])
+                self.add(key, message[len(attr_name) + 1:])
             else:
                 self.add_to_base(message)
 
@@ -168,7 +167,6 @@ class ResourceMeta(type):
         if '_plural' not in new_attrs or not new_attrs['_plural']:
             new_attrs['_plural'] = util.pluralize(new_attrs['_singular'])
 
-
         klass = type.__new__(mcs, name, bases, new_attrs)
 
         # if _site is defined, use the site property to ensure that user
@@ -194,8 +192,8 @@ class ResourceMeta(type):
         return cls._user
 
     def set_user(cls, value):
-      cls._connection = None
-      cls._user = value
+        cls._connection = None
+        cls._user = value
 
     user = property(get_user, set_user, None,
                     'A username for HTTP Basic Auth.')
@@ -311,7 +309,7 @@ class ActiveResource(object):
                             nested URLs.
         """
         if attributes is None:
-          attributes = {}
+            attributes = {}
         self.klass = self.__class__
         self.attributes = {}
         if prefix_options:
@@ -402,7 +400,7 @@ class ActiveResource(object):
         Args:
             attributes: A dictionary of attributes which represent this object.
         Returns:
-            The new resource (which may or may not have been saved successfully).
+            The new resource (which may not have been saved successfully).
         """
         resource = cls(attributes)
         resource.save()
@@ -520,7 +518,7 @@ class ActiveResource(object):
         """
         resources = []
         if isinstance(elements, dict):
-          elements = [elements]
+            elements = [elements]
         # slice elements to ensure that this is a list-type object not a dict
         for element in elements[:]:
             resources.append(cls(element, prefix_options))
@@ -553,7 +551,7 @@ class ActiveResource(object):
             query_options: A dict of items to add to the query string for
                            the request.
         Returns:
-            The path (relative to site) to the element formatted with the query.
+            The relative path to the element formatted with the query.
         """
         return '%(prefix)s/%(plural)s/%(id)s.%(format)s%(query)s' % {
                 'prefix': cls._prefix(prefix_options),
@@ -706,10 +704,10 @@ class ActiveResource(object):
             if isinstance(value, list):
                 new_value = []
                 for i in value:
-                  if isinstance(i, dict):
-                      new_value.append(i)
-                  else:
-                      new_value.append(i.to_dict())
+                    if isinstance(i, dict):
+                        new_value.append(i)
+                    else:
+                        new_value.append(i.to_dict())
                 values[key] = new_value
             elif isinstance(value, ActiveResource):
                 values[key] = value.to_dict()
@@ -957,7 +955,7 @@ class ActiveResource(object):
             method_name: The HTTP method being used.
             options: A dictionary of query/prefix options.
         Returns:
-            The path (relative to site) to the element formatted with the query.
+            The relative path to the element formatted with the query.
         """
         prefix_options, query_options = self._split_options(options)
         prefix_options.update(self._prefix_options)

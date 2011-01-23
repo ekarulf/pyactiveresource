@@ -29,12 +29,12 @@ class ActiveResourceTest(unittest.TestCase):
         self.soup = {'id': 1, 'name': 'Hot Water Soup'}
         self.store_new = {'name': 'General Store'}
         self.general_store = {'id': 1, 'name': 'General Store'}
-        self.store_update = {'manager_id': 3, 'id': 1, 'name':'General Store'}
+        self.store_update = {'manager_id': 3, 'id': 1, 'name': 'General Store'}
         self.xml_headers = {'Content-type': 'application/xml'}
 
-        self.matz  = util.to_xml(
+        self.matz = util.to_xml(
                 {'id': 1, 'name': 'Matz'}, root='person')
-        self.matz_deep  = util.to_xml(
+        self.matz_deep = util.to_xml(
                 {'id': 1, 'name': 'Matz', 'other': 'other'},
                 root='person')
         self.matz_array = util.to_xml(
@@ -44,8 +44,8 @@ class ActiveResourceTest(unittest.TestCase):
         self.addy = util.to_xml(
                 {'id': 1, 'street': '12345 Street'},
                 root='address')
-        self.addy_deep  = util.to_xml(
-                {'id': 1, 'street': '12345 Street', 'zip': "27519" },
+        self.addy_deep = util.to_xml(
+                {'id': 1, 'street': '12345 Street', 'zip': "27519"},
                 root='address')
 
         http_fake.initialize()  # Fake all http requests
@@ -152,28 +152,28 @@ class ActiveResourceTest(unittest.TestCase):
         self.assertEqual(self.arnold, arnold.attributes)
 
     def test_find_should_handle_array_query_args(self):
-      query = urllib.urlencode({'vars[]': ['a', 'b', 'c']}, True)
-      self.http.respond_to(
-        'GET', '/people.xml?%s' % query, {},
-        util.to_xml([self.arnold], root='people'))
-      arnold = self.person.find_first(vars=['a', 'b', 'c'])
-      self.assertEqual(self.arnold, arnold.attributes)
+        query = urllib.urlencode({'vars[]': ['a', 'b', 'c']}, True)
+        self.http.respond_to(
+          'GET', '/people.xml?%s' % query, {},
+          util.to_xml([self.arnold], root='people'))
+        arnold = self.person.find_first(vars=['a', 'b', 'c'])
+        self.assertEqual(self.arnold, arnold.attributes)
 
     def test_find_should_handle_dictionary_query_args(self):
-      query = urllib.urlencode({'vars[key]': 'val'}, True)
-      self.http.respond_to(
-        'GET', '/people.xml?%s' % query, {},
-        util.to_xml([self.arnold], root='people'))
-      arnold = self.person.find_first(vars={'key': 'val'})
-      self.assertEqual(self.arnold, arnold.attributes)
+        query = urllib.urlencode({'vars[key]': 'val'}, True)
+        self.http.respond_to(
+            'GET', '/people.xml?%s' % query, {},
+            util.to_xml([self.arnold], root='people'))
+        arnold = self.person.find_first(vars={'key': 'val'})
+        self.assertEqual(self.arnold, arnold.attributes)
 
     def test_find_should_handle_dictionary_query_args_with_array_value(self):
-      query = urllib.urlencode({'vars[key][]': ['val1', 'val2']}, True)
-      self.http.respond_to(
-        'GET', '/people.xml?%s' % query, {},
-        util.to_xml([self.arnold], root='people'))
-      arnold = self.person.find_first(vars={'key': ['val1', 'val2']})
-      self.assertEqual(self.arnold, arnold.attributes)
+        query = urllib.urlencode({'vars[key][]': ['val1', 'val2']}, True)
+        self.http.respond_to(
+            'GET', '/people.xml?%s' % query, {},
+            util.to_xml([self.arnold], root='people'))
+        arnold = self.person.find_first(vars={'key': ['val1', 'val2']})
+        self.assertEqual(self.arnold, arnold.attributes)
 
     def test_find_with_prefix_options(self):
         # Paths for prefix_options related requests
@@ -195,12 +195,12 @@ class ActiveResourceTest(unittest.TestCase):
         self.assertEqual([], nobody)
 
     def test_set_prefix_source(self):
-      self.http.respond_to(
-          'GET', '/stores/1/people.xml?name=Ralph', {},
-          util.to_xml([], root='people'))
-      self.person.prefix_source = '/stores/${store_id}/'
-      nobody = self.person.find(store_id=1, name='Ralph')
-      self.assertEqual([], nobody)
+        self.http.respond_to(
+            'GET', '/stores/1/people.xml?name=Ralph', {},
+            util.to_xml([], root='people'))
+        self.person.prefix_source = '/stores/${store_id}/'
+        nobody = self.person.find(store_id=1, name='Ralph')
+        self.assertEqual([], nobody)
 
     def test_save(self):
         # Return an object with id for a post(save) request.
@@ -222,7 +222,7 @@ class ActiveResourceTest(unittest.TestCase):
         self.http.respond_to('GET', '/people/retrieve.xml?name=Matz',
                              {}, self.matz_array)
         self.assertEqual([{'id': 1, 'name': 'Matz'}],
-                         self.person.get('retrieve', name='Matz' ))
+                         self.person.get('retrieve', name='Matz'))
 
     def test_class_post(self):
         self.http.respond_to('POST', '/people/hire.xml?name=Matz',
@@ -297,9 +297,8 @@ class ActiveResourceTest(unittest.TestCase):
             'GET', '/people/1/addresses/1.xml', {}, self.addy)
         self.http.respond_to(
             'GET', '/people/1/addresses/1/deep.xml', {}, self.addy_deep)
-        self.assertEqual({'id': 1, 'street': '12345 Street', 'zip': "27519" },
+        self.assertEqual({'id': 1, 'street': '12345 Street', 'zip': "27519"},
                          self.address.find(1, person_id=1).get('deep'))
-
 
     def test_instance_delete(self):
         self.http.respond_to('GET', '/people/1.xml', {}, self.matz)
@@ -339,7 +338,8 @@ class ActiveResourceTest(unittest.TestCase):
         self.assertEqual(77, self.person.connection.timeout)
 
     def test_user_variable_can_be_reset(self):
-        class Actor(activeresource.ActiveResource): pass
+        class Actor(activeresource.ActiveResource):
+            pass
         Actor.site = 'http://cinema'
         self.assert_(Actor.user is None)
         Actor.user = 'username'
@@ -348,7 +348,8 @@ class ActiveResourceTest(unittest.TestCase):
         self.assertFalse(Actor.connection.user)
 
     def test_password_variable_can_be_reset(self):
-        class Actor(activeresource.ActiveResource): pass
+        class Actor(activeresource.ActiveResource):
+            pass
         Actor.site = 'http://cinema'
         self.assert_(Actor.password is None)
         Actor.password = 'password'
@@ -357,15 +358,17 @@ class ActiveResourceTest(unittest.TestCase):
         self.assertFalse(Actor.connection.password)
 
     def test_format_variable_can_by_reset(self):
-      class Actor(activeresource.ActiveResource): pass
-      Actor.site = 'http://cinema'
-      Actor.format = None
-      self.assert_(Actor.connection.format is None)
-      Actor.format = object()
-      self.assertEqual(Actor.format, Actor.connection.format)
+        class Actor(activeresource.ActiveResource):
+            pass
+        Actor.site = 'http://cinema'
+        Actor.format = None
+        self.assert_(Actor.connection.format is None)
+        Actor.format = object()
+        self.assertEqual(Actor.format, Actor.connection.format)
 
     def test_timeout_variable_can_be_reset(self):
-        class Actor(activeresource.ActiveResource): pass
+        class Actor(activeresource.ActiveResource):
+            pass
         Actor.site = 'http://cinema'
         self.assert_(Actor.timeout is None)
         Actor.timeout = 5
@@ -374,7 +377,8 @@ class ActiveResourceTest(unittest.TestCase):
         self.assert_(Actor.connection.timeout is None)
 
     def test_credentials_from_site_are_decoded(self):
-        class Actor(activeresource.ActiveResource): pass
+        class Actor(activeresource.ActiveResource):
+            pass
         Actor.site = 'http://my%40email.com:%31%32%33@cinema'
         self.assertEqual('my@email.com', Actor.user)
         self.assertEqual('123', Actor.password)
@@ -385,26 +389,30 @@ class ActiveResourceTest(unittest.TestCase):
         self.assertEqual(['david', 'test123'], [Actor.user, Actor.password])
 
     def test_changing_subclass_site_does_not_affect_superclass(self):
-        class Actor(self.person): pass
+        class Actor(self.person):
+            pass
 
         Actor.site = 'http://actor-site'
         self.assertNotEqual(Actor.site, self.person.site)
 
     def test_changing_superclass_site_affects_unset_subclass_site(self):
-        class Actor(self.person): pass
+        class Actor(self.person):
+            pass
 
         self.person.site = 'http://person-site'
         self.assertEqual(Actor.site, self.person.site)
 
     def test_changing_superclass_site_does_not_affect_set_subclass_set(self):
-        class Actor(self.person): pass
+        class Actor(self.person):
+            pass
 
         Actor.site = 'http://actor-site'
         self.person.site = 'http://person-site'
         self.assertNotEqual(Actor.site, self.person.site)
 
     def test_updating_superclass_site_resets_descendent_connection(self):
-        class Actor(self.person): pass
+        class Actor(self.person):
+            pass
 
         self.assert_(self.person.connection is Actor.connection)
 
@@ -412,7 +420,8 @@ class ActiveResourceTest(unittest.TestCase):
         self.assert_(self.person.connection is Actor.connection)
 
     def test_updating_superclass_user_resets_descendent_connection(self):
-        class Actor(self.person): pass
+        class Actor(self.person):
+            pass
 
         self.assert_(self.person.connection is Actor.connection)
 
@@ -420,7 +429,8 @@ class ActiveResourceTest(unittest.TestCase):
         self.assert_(self.person.connection is Actor.connection)
 
     def test_updating_superclass_password_resets_descendent_connection(self):
-        class Actor(self.person): pass
+        class Actor(self.person):
+            pass
 
         self.assert_(self.person.connection is Actor.connection)
 
@@ -428,7 +438,8 @@ class ActiveResourceTest(unittest.TestCase):
         self.assert_(self.person.connection is Actor.connection)
 
     def test_updating_superclass_timeout_resets_descendent_connection(self):
-        class Actor(self.person): pass
+        class Actor(self.person):
+            pass
 
         self.assert_(self.person.connection is Actor.connection)
 

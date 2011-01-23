@@ -14,7 +14,7 @@ from pprint import pprint
 
 def diff_dicts(d1, d2):
     """Print the differences between two dicts. Useful for troubleshooting."""
-    pprint([(k,v) for k,v in d2.items()
+    pprint([(k, v) for k, v in d2.items()
             if v != d1[k]])
 
 
@@ -150,7 +150,6 @@ class UtilTest(unittest.TestCase):
         self.assertEqual('topic', parsed[0].element_type)
         self.assertEqual('sub_topic', parsed[1].element_type)
 
-
     def test_xml_to_dict_empty_array(self):
         blog_xml = '''<blog>
             <posts type="array"></posts>
@@ -189,7 +188,6 @@ class UtilTest(unittest.TestCase):
         blog_file = blog_dict['blog']['logo']
         self.assertEqual('logo.png', blog_file.name)
         self.assertEqual('image/png', blog_file.content_type)
-
 
     def test_xml_to_dict_file_with_defaults(self):
         blog_xml = '''<blog>
@@ -280,3 +278,4 @@ class UtilTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+

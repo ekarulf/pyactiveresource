@@ -15,14 +15,14 @@ class Error(Exception):
 
 class Base(object):
     """A base format object for inheritance."""
-    
+
 
 class XMLFormat(Base):
     """Read XML formatted ActiveResource objects."""
-    
+
     extension = 'xml'
     mime_type = 'application/xml'
-    
+
     @staticmethod
     def decode(resource_string):
         """Convert a resource string to a dictionary."""
@@ -35,3 +35,4 @@ class XMLFormat(Base):
         if isinstance(data, dict) and len(data) == 1:
             data = data.values()[0]
         return data
+

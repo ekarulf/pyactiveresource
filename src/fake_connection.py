@@ -9,18 +9,19 @@ import urllib
 from pyactiveresource import connection
 from pyactiveresource import formats
 
+
 class Error(Exception):
     """The base exception class for this module."""
 
 
 class FakeConnection(object):
     """A fake HTTP connection for testing.
-    
+
     Inspired by ActiveResource's HttpMock class. This class is designed to
     take a list of inputs and their corresponding outputs.
-    
+
     Inputs will be matched on the method, path, query and data arguments
-    
+
     Example:
     >>> connection = FakeConnection()
     >>> body = '<?xml ... />'
@@ -53,7 +54,7 @@ class FakeConnection(object):
     def respond_to(self, method, path, headers, data, body,
                    response_headers=None):
         """Set the response for a given request.
-        
+
         Args:
             method: The http method (e.g. 'get', 'put' etc.).
             path: The path being requested (e.g. '/collection/id.xml')
@@ -78,20 +79,21 @@ class FakeConnection(object):
                 return connection.Response(200, response_body, response_headers)
         raise Error('Invalid or unknown request: %s %s\n%s' %
                     (path, headers, data))
-        
+
     def get(self, path, headers=None):
         """Perform an HTTP get request."""
         return self.format.decode(
             self._lookup_response('get', path, headers, None).body)
-        
+
     def post(self, path, headers=None, data=None):
         """Perform an HTTP post request."""
         return self._lookup_response('post', path, headers, data)
-    
+
     def put(self, path, headers=None, data=None):
         """Perform an HTTP post request."""
         return self._lookup_response('put', path, headers, data)
-    
+
     def delete(self, path, headers=None):
         """Perform an HTTP delete request."""
         return self._lookup_response('delete', path, headers, None)
+
